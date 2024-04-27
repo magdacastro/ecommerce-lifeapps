@@ -7,7 +7,7 @@
         <div>
           <div class="row">
             <div class="col-md-12 px-0">
-              <img :src="banner" class="w-100" style="max-height: 20rem;">
+              <img :src="banner" class="w-100" style="max-height: 25rem;">
             </div>
           </div>
         </div>
@@ -38,42 +38,63 @@
       </div>
     </section>
 
-    <footer class="bg-body-tertiary">
-      <div class="container-fluid align-footer">
-        <div>
-          <a class="navbar-brand" href="#">
-            <img src="/assets/images/ecommerce.svg" class="w-size" alt="Logo" />
-          </a>
+    <section class="row px-4">
+      <NuxtLink to="/" v-for="card in cards" class="col-sm-12 col-md-4 my-4">
+        <div class="card">
+          <img class="card-img-top" style="height: 16rem;" :src="card.image" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title text-center">
+              <strong>{{ card.name }}</strong>
+            </h5>
+            <p class="card-text text-center">{{ formatMoneyValue(card.price) }}</p>
+          </div>
         </div>
-        <div class="d-flex footer-link justify-content-end">
-          <a href="#">Home</a>
-          <a href="#">Tênis</a>
-          <a href="#">Camisetas</a>
-          <a href="#">Calças</a>
-        </div>
-      </div>
-    </footer>
+      </NuxtLink>
+    </section>
+
+    <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
 import banner from "@/assets/images/banner.png";
 
+type Card = {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  discount_percentage: number;
+  promotional_price: number;
+  image: string;
+  description: string;
+}
+
 export default {
   data() {
     return {
-      banner
+      banner,
+      cards: [] as Card[],
+      filteredCards: [],
+      filters: []
+    }
+  },
+  created() {
+    this.$watch(
+      () => { this.$filters },
+      () => { console.log("changed..."); }
+    );
+    fetch(`${this.$config.public.API_URL}/products`)
+      .then(response => response.json())
+      .then((cards: Card[]) => {
+        console.log(cards[0].price.toLocaleString())
+        this.cards = cards;
+      });
+  },
+  methods: {
+    formatMoneyValue(moneyValue: number): string {
+      return moneyValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
     }
   }
 }
 </script>
-
-<style scoped>
-.banner {
-  background-image: url('/_nuxt/assets/images/banner.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  height: auto;
-  width: 100vw;
-}
-</style>

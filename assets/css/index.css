@@ -8,7 +8,10 @@
     width: 200px;
 }
 
-
+a {
+    color: #000;
+    text-decoration: none;
+}
 
 .footer-link a {
     margin: 0 24px;
@@ -58,7 +61,6 @@
     color: #FFFFFF;
 }
 
-
 /* MEDIA SCREEN */
 
 @media screen and (max-width: 765px) {
@@ -81,5 +83,3 @@ md 765px
 sm 490px
 
 */
-
-

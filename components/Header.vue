@@ -2,10 +2,10 @@
   <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
       <div class="row" style="width: 100vw">
-        <a class="navbar-brand col-lg-4 m-0" href="#">
+        <a class="navbar-brand col-lg-7 m-0" href="#">
           <img src="/assets/images/ecommerce.svg" class="w-size" alt="Logo" />
         </a>
-        <div class="d-flex align-items-center col-lg-8" role="search">
+        <div class="d-flex align-items-center col-lg-5" role="search">
           <div class="input-group rounded me-4">
             <input
               type="search"

@@ -18,8 +18,8 @@ export default defineNuxtConfig({
         },
         {
           src: "https://kit.fontawesome.com/c97a6b65ef.js",
-          crossorigin: "anonymous"
-        }
+          crossorigin: "anonymous",
+        },
       ],
       link: [
         {
@@ -31,9 +31,14 @@ export default defineNuxtConfig({
         },
         {
           rel: "stylesheet",
-          href: "_nuxt/assets/css/index.css"
-        }
+          href: "_nuxt/assets/css/index.css",
+        },
       ],
+    },
+  },
+  runtimeConfig: {
+    public: {
+      API_URL: process.env.API_URL,
     },
   },
 });
