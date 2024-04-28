@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   css: ['~/assets/css/index.css'],
   devtools: { enabled: true },
+  plugins: [
+    '@/plugins/format',
+    '@/plugins/storage',
+  ],
   app: {
     head: {
       script: [
