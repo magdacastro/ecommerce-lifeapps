@@ -18,10 +18,10 @@
                                 <i v-else class="fa-regular fa-heart"></i>
                             </span>
                         </div>
-                        <h2 class="price">{{ formatMoneyValue(card.price) }}</h2>
+                        <h2 class="price">{{ $format().money(card.price) }}</h2>
                         <h3 class="title-description">Descrição</h3>
                         <p class="description">{{ card.description }}</p>
-                        <button type="button" class="btn-cart col-lg-6 col-sm-12 col-md-3">
+                        <button type="button" @click="addToCart()" class="btn-cart col-lg-6 col-sm-12 col-md-3">
                             ADICIONAR AO CARRINHO
                         </button>
                     </div>
@@ -58,21 +58,24 @@ export default {
             });
     },
     methods: {
-        formatMoneyValue(moneyValue: number): string {
-            if (moneyValue) {
-                return moneyValue.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
+        addToCart() {
+            const products = this.$storage().getAttributeFromLocalStorage("cart");
+
+            const existsOnStorage = products.find((product: { id: string, quantity: number }) => product.id === this.card.id);
+
+            if (!existsOnStorage) {
+                products.push({
+                    id: this.card.id,
+                    quantity: 1
+                });
+
+                this.$storage().addItemsToStorage("cart", products);
             }
 
-            return 'Carregando...';
+            this.$router.push("/cart");
         },
         getFavoritesProductsFromStorage() {
-            const favorites = window.localStorage.getItem("favorites");
-
-            if (favorites) {
-                return JSON.parse(favorites);
-            }
-
-            return [];
+            return this.$storage().getAttributeFromLocalStorage("favorites");
         },
         setFavoriteProperty() {
             const items = this.getFavoritesProductsFromStorage();
@@ -97,9 +100,10 @@ export default {
                 items.push(parseInt(this.card.id));
             }
 
-            const favorites = JSON.stringify(Array.from((new Set(items)).values()));
-
-            window.localStorage.setItem("favorites", favorites);
+            this.$storage().addItemsToStorage("favorites", items);
+        },
+        getCartUrl(id: string) {
+            return `/cart/${id}`;
         }
     }
 }
