@@ -2,9 +2,9 @@
   <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
       <div class="row" style="width: 100vw">
-        <a class="navbar-brand col-lg-7 m-0" href="#">
+        <NuxtLink class="navbar-brand col-lg-7 m-0" to="/">
           <img src="/assets/images/ecommerce.svg" class="w-size" alt="Logo" />
-        </a>
+        </NuxtLink>
         <div class="d-flex align-items-center col-lg-5" role="search">
           <div class="input-group rounded me-4">
             <input
@@ -18,7 +18,7 @@
             </span>
           </div>
           <a class="me-4"><img src="/assets/images/profile_img.svg" alt="Profile" /></a>
-          <a class="me-4"><img src="/assets/images/shopping_img.svg" alt="Shopping" /></a>
+          <NuxtLink to="/cart" class="me-4"><img src="/assets/images/shopping_img.svg" alt="Shopping" /></NuxtLink>
         </div>
       </div>
     </div>
