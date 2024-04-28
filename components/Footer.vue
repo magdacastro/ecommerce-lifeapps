@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-body-tertiary">
+  <footer class="bg-body-footer">
     <div class="container-fluid align-footer">
       <div>
         <a class="navbar-brand" href="#">

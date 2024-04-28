@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  css: ['~/assets/css/index.css'],
   devtools: { enabled: true },
   app: {
     head: {
@@ -28,11 +29,7 @@ export default defineNuxtConfig({
           integrity:
             "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH",
           crossorigin: "anonymous",
-        },
-        {
-          rel: "stylesheet",
-          href: "_nuxt/assets/css/index.css",
-        },
+        }
       ],
     },
   },

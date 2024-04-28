@@ -37,8 +37,6 @@ a {
 
 .btn {
     border-radius: 0px;
-    width: 315px;
-    margin: 0 12px;
 }
 
 .btn-option {
@@ -54,14 +52,76 @@ a {
 .btn-selected {
     background-color: #004197; 
     color: #FFFFFF;
+    border: #004197; 
 }
 
 .btn-selected:hover {
     background-color: #004197; 
     color: #FFFFFF;
+    border: #004197; 
+}
+
+.btn-cart {
+    background-color: #004197; 
+    color: #FFFFFF;
+    border: #004197; 
+    width: 100%;
+    padding: 6px;
+}
+
+.card {
+    width: 300px;
+}
+
+
+.card img {
+    height: 400px;
+    object-fit: cover;
+    max-width: 100%;
+    width: 300px;
+}
+
+.img-detail {
+    height: 515px;
+    object-fit: cover;
+    max-width: 100%;
+    width: 515px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 25px;
+    font-weight: bold;
+    color: #E2342D;
+}
+
+.title-description {
+    font-size: 25px;
+}
+
+.description {
+    font-size: 16px;
+}
+
+.dropdown-menu {
+    border-radius: 0;
+}
+
+.bg-body-footer {
+    background-color: #0000000D !important;
 }
 
 /* MEDIA SCREEN */
+
+@media screen and (max-width: 995px) {
+    .col-description {
+        margin: 18px 0;
+    }
+}
 
 @media screen and (max-width: 765px) {
     .align-footer {
@@ -71,7 +131,7 @@ a {
 
 @media screen and (max-width: 490px){
     .footer-link a {
-        margin: 0 12px;
+        margin: 0 16px;
     }
 }
 
