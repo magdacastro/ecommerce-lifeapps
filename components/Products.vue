@@ -68,6 +68,7 @@ export default {
       cards: [] as Card[],
       filteredCards: [],
       filter: "",
+      q: '',
       filters,
       page: 1,
       orderBy: ""
@@ -79,6 +80,12 @@ export default {
       .then((cards: Card[]) => {
         this.cards = cards;
       });
+
+    this.$watch(() => this.$route.query, () => {
+      if (this.$route.query && this.$route.query.q && !Array.isArray(this.$route.query.q)) {
+        this.q = this.$route.query.q;
+      }
+    })
   },
   computed: {
     getProductsWithFilters() {
@@ -88,6 +95,10 @@ export default {
             return card.category === this.filter
           } else if (this.getFilterFromQueryParameter()) {
             return card.category === this.getFilterFromQueryParameter()
+          }
+
+          if (this.q) {
+            return card.name.toUpperCase().includes(this.q.toUpperCase())
           }
 
           return true;

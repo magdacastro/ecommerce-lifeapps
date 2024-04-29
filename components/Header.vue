@@ -7,8 +7,8 @@
         </NuxtLink>
         <div class="d-flex align-items-center col-lg-5" role="search">
           <div class="input-group rounded me-4">
-            <input type="search" class="form-control border-end-0" placeholder="Quero comprar algo específico..."
-              aria-label="Search" />
+            <input type="search" class="form-control border-end-0" v-model="q" @keyup="setSearchFilterToQueryString()"
+              placeholder="Quero comprar algo específico..." aria-label="Search" />
             <span class="input-group-text border-end-1" id="search-addon">
               <i class="fas fa-search"></i>
             </span>
@@ -38,7 +38,21 @@
 <script lang="ts">
 
 export default {
+  data() {
+    return {
+      q: ''
+    }
+  },
   methods: {
+    setSearchFilterToQueryString() {
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          ...this.$route.query,
+          ...{ q: this.q }
+        }
+      })
+    },
     verifyIfThereAreItemsOnCart() {
       return this.checkStorageProperty("cart");
     },
