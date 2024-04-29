@@ -6,57 +6,76 @@
         <div class="container mt-4 mb-4">
             <p>Home / Carrinho </p>
 
-            <div class="col-lg-8">
-                <h1 class="title">Carrinho</h1>
-                <p>Total ({{ totalProducts() }} produtos) <b> {{ totalprice() }} </b></p>
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="title">Carrinho</h1>
+                    <p>Total ({{ totalProducts() }} produtos) <b> {{ totalprice() }} </b></p>
 
-                <ul>
-                    <li v-for="product in getProducts()">
-                        <div class="row mt-3 mb-3">
-                            <div class="col-lg-3 col-md-4">
-                                <img :src="product.image" class="list-img-cart" alt="">
-                            </div>
-                            <div class="col-lg-9 col-md-8 info-card d-flex flex-column justify-content-between">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <h1 class="title-name">{{ product.name }}</h1>
-                                    <span @click="removeProduct()" style="cursor: pointer;">
-                                        <i class="fa fa-trash" aria-hidden="true"></i>
-                                    </span>
+                    <ul>
+                        <li v-for="product in getProducts()">
+                            <div class="row mt-3 mb-3">
+                                <div class="col-lg-3 col-md-4">
+                                    <img :src="product.image" class="list-img-cart" alt="">
                                 </div>
-
-                                <div>
-                                    <p>{{ product.description }}</p>
-                                </div>
-
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="form-group">
-                                        <select @change="($e) => logSelectedOption($e, product.id)" class="form-control"
-                                            id="quantity-option">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
+                                <div class="col-lg-9 col-md-8 info-card d-flex flex-column justify-content-between">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h1 class="title-name">{{ product.name }}</h1>
+                                        <span @click="removeProduct()" style="cursor: pointer;">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </span>
                                     </div>
+
                                     <div>
-                                        <div v-if="product.promotional_price">
-                                            <p class="discount"><b>{{ $format().money(product.price) }}</b></p>
-                                            <p><b> {{ $format().money(product.promotional_price) }}</b></p>
-                                        </div>
+                                        <p>{{ product.description }}</p>
+                                    </div>
 
-                                        <div v-else>
-                                            <p><b>{{ $format().money(product.price) }}</b></p>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="form-group">
+                                            <select @change="($e) => logSelectedOption($e, product.id)"
+                                                class="form-control" id="quantity-option">
+                                                <option :value="i" v-for="i in 5" :selected="i === product.quantity">{{
+                                                    i }}</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <div v-if="product.promotional_price">
+                                                <p class="discount"><b>{{ $format().money(product.price) }}</b></p>
+                                                <p><b> {{ $format().money(product.promotional_price) }}</b></p>
+                                            </div>
+
+                                            <div v-else>
+                                                <p><b>{{ $format().money(product.price) }}</b></p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 offset-lg-1">
+                    <h1 class="title-cart mb-4">RESUMO</h1>
+
+                    <div class="d-flex justify-content-between">
+                        <p>Subtotal de produtos</p>
+                        <p>{{ totalprice() }}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p>Entrega</p>
+                        <p>R$ 40,00</p>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <p><b>Total</b></p>
+                        <p><b>{{ totalAcquisition() }}</b></p>
+                    </div>
+
+                    <button type="button" class="btn-cart mb-4">finalizar a compra</button>
+                    <button type="button" class="btn-clear mb-4">limpar carrinho</button>
+
+                </div>
             </div>
-            <div class="col-lg-4"></div>
         </div>
         <Footer>
         </Footer>
@@ -99,6 +118,15 @@ export default {
             return this.cart.length;
         },
         totalprice() {
+            const sum = this.getSum();
+
+            return this.$format().money(sum);
+        },
+        totalAcquisition() {
+            const price = this.getSum();
+            return this.$format().money(price + 40);
+        },
+        getSum() {
             let sum = 0;
 
             const products: CustomProductType[] = this.getProducts().
@@ -112,7 +140,7 @@ export default {
                 sum += (promotional_price || price) * quantity;
             })
 
-            return this.$format().money(sum);
+            return sum;
         },
         getProducts() {
             return this.cart.map(({ id, quantity }: CartItemFromStorage) => {
@@ -143,7 +171,9 @@ export default {
                     }
 
                     return cartItem;
-                })
+                });
+
+                this.$storage().addItemsToStorage("cart", this.cart);
             }
         },
     }

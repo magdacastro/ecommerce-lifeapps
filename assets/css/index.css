@@ -63,6 +63,16 @@ a {
   border: #004197;
   width: 100%;
   padding: 6px;
+  text-transform: uppercase;
+}
+
+.btn-clear {
+  background-color: #E2342D;
+  color: #ffffff;
+  border: #E2342D;
+  width: 100%;
+  padding: 6px;
+  text-transform: uppercase;
 }
 
 .card {
@@ -114,6 +124,12 @@ a {
 
 .title-name {
   font-size: 20px;
+}
+
+.title-cart {
+  font-size: 20px;
+  color: #41414D;
+  font-weight: bold;
 }
 
 .description {

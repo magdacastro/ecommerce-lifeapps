@@ -1,5 +1,5 @@
 export default defineNuxtPlugin(() => {
-  function addItemsToStorage(key: string, items: []) {
+  function addItemsToStorage(key: string, items: Array<any>) {
     const favorites = JSON.stringify(Array.from(new Set(items).values()));
 
     window.localStorage.setItem(key, favorites);
