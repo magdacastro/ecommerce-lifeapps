@@ -1,68 +1,143 @@
 <template>
-  <section>
-    <div class="row btn-group m-4">
-      <button type="button" class="btn btn-selected  col-sm-12 col-md-3">Todos os produtos</button>
-      <button type="button" class="btn btn-option    col-sm-12 col-md-3">Tênis</button>
-      <button type="button" class="btn btn-option    col-sm-12 col-md-3">Camisetas</button>
-      <button type="button" class="btn btn-option    col-sm-12 col-md-3">Calças</button>
-    </div>
-
-    <div class="items m-4">
-      <p>10 Produtos</p>
-
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Ordernar por
+  <div>
+    <section>
+      <div class="row btn-group d-flex mt-4 mb-4">1
+        <button type="button" @click="setFilter()" class="btn col-sm-12 col-md-2 col-lg-2"
+          :class="{ 'btn-selected': filter.length === 0 }">
+          Todos os produtos
         </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Menor preço</a></li>
-          <li><a class="dropdown-item" href="#">Maior preço</a></li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
-  <section class="row px-4 m-0">
-    <NuxtLink :to="getProductUrl(card.id)" v-for="card in cards"
-      class="col-sm-12 col-md-4 my-4 d-flex align-items-center justify-content-center">
-      <div class="card ">
-        <img class="card-img-top" :src="card.image" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title text-center">
-            <strong>{{ card.name }}</strong>
-          </h5>
-          <p class="card-text text-center">{{ $format().money(card.price) }}</p>
+        <button type="button" @click="setFilter(name)" v-for="{ name } in filters"
+          class="btn btn-option col-sm-12 col-md-2 col-lg-2" :class="{ 'btn-selected': filter === name }">{{ name
+          }}</button>
+      </div>
+
+      <div class="items mb-4">
+        <p>{{ cards.length }} Produtos</p>
+
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Ordernar por
+          </button>
+          <ul class="dropdown-menu">
+            <li><span class="dropdown-item" @click="setOrderByPrice('ASC')">Menor preço</span></li>
+            <li><span class="dropdown-item" @click="setOrderByPrice('DESC')">Maior preço</span></li>
+          </ul>
         </div>
       </div>
-    </NuxtLink>
-  </section>
+    </section>
+
+    <section class="row px-4 m-0">
+      <NuxtLink :to="getProductUrl(card.id)" v-for="card in getProducts"
+        class="col-sm-12 col-md-4 my-4 d-flex align-items-center justify-content-center">
+        <div class="card ">
+          <span v-if="card.discount_percentage" class="price-badge">{{ card.discount_percentage }}% OFF</span>
+          <img class="card-img-top" :src="card.image">
+          <div class="card-body">
+            <h5 class="card-title text-center">
+              <strong>{{ card.name }}</strong>
+            </h5>
+            <div v-if="card.promotional_price">
+              <p class="card-text text-center"> <s>{{ $format().money(card.price) }}</s> <span>{{
+                $format().money(card.promotional_price) }}</span></p>
+            </div>
+            <p v-else class="card-text text-center">{{ $format().money(card.price) }}</p>
+          </div>
+        </div>
+      </NuxtLink>
+    </section>
+
+    <button v-for="i in pagesQuantity" @click="setPage(i)">{{ i }}</button>
+  </div>
 </template>
 
 <script lang="ts">
 import type { Card } from "@/interfaces/Card.d.ts";
+
+type CatetegoryFilterElement = {
+  name: string;
+}
+
+const filters: CatetegoryFilterElement[] = [
+  {
+    name: 'Tênis'
+  },
+  {
+    name: 'Camisetas'
+  },
+  {
+    name: 'Calças'
+  }
+];
+
+const PER_PAGE = 6;
 
 export default {
   data() {
     return {
       cards: [] as Card[],
       filteredCards: [],
-      filters: []
+      filter: "",
+      filters,
+      page: 1,
+      orderBy: ""
     }
   },
   created() {
-    this.$watch(
-      () => { this.$filters },
-      () => { console.log("changed..."); }
-    );
     fetch(`${this.$config.public.API_URL}/products`)
       .then(response => response.json())
       .then((cards: Card[]) => {
         this.cards = cards;
       });
   },
+  computed: {
+    getProducts() {
+      const offset = (this.page - 1) * PER_PAGE;
+      let filtered = this.cards
+        .filter((card) => {
+          if (this.filter) {
+            return card.category === this.filter
+          }
+
+          return true;
+        });
+
+      if (this.orderBy) {
+        filtered.sort(this.compare);
+      }
+
+      return filtered.slice(offset, offset + PER_PAGE);
+    },
+    pagesQuantity() {
+      return Math.ceil(this.cards.length / PER_PAGE);
+    }
+  },
   methods: {
     getProductUrl(id: string) {
       return `/products/${id}`;
+    },
+    compare(a: Card, b: Card) {
+      if (a.price < b.price) {
+        return this.orderBy === 'ASC' ? -1 : 1;
+      }
+
+      if (a.price > b.price) {
+        return this.orderBy === 'ASC' ? 1 : -1;
+      }
+
+      return 0;
+    },
+    setFilter(type?: string) {
+      if (type) {
+        this.filter = type;
+      }
+    },
+    setPage(page: number) {
+      this.page = page;
+    },
+    setOrderByPrice(order: string) {
+      this.orderBy = order;
     }
   }
 }
