@@ -58,7 +58,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-lg-3 offset-lg-1">
+                <div v-if="thereAreProductsOnCart()" class="col-lg-3 offset-lg-1">
                     <h1 class="title-cart mb-4">RESUMO</h1>
 
                     <div class="d-flex justify-content-between">
@@ -115,13 +115,15 @@ export default {
                 this.cart = this.getProductsFromStorage();
             });
     },
-    computed: {},
     methods: {
         getProductsFromStorage() {
             return this.$storage().getAttributeFromLocalStorage("cart");
         },
         totalProducts() {
             return this.cart.length;
+        },
+        thereAreProductsOnCart() {
+            return this.cart.length > 0 ? true : false;
         },
         totalprice() {
             const sum = this.getSum();

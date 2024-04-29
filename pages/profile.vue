@@ -22,13 +22,23 @@
                                     <img :src="product.image" class="list-img-cart" alt="">
                                 </div>
                                 <div class="col-lg-9 col-md-8 info-card d-flex flex-column justify-content-between">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <h1 class="title-name">{{ product.name }}</h1>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="d-flex flex-column">
+                                            <h1 class="title-name">{{ product.name }}</h1>
+                                            <p>{{ product.description }}</p>
+                                        </div>
+
+                                        <div>
+                                            <span @click="removeFavorite(product.id)" style="cursor: pointer;">
+                                                <i class="fa-solid fa-heart"></i>
+                                            </span>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <p>{{ product.description }}</p>
-                                    </div>
+                                    <button type="button" @click="addToCart(product.id)"
+                                        class="btn-cart col-lg-6 col-sm-12 col-md-3">
+                                        ADICIONAR AO CARRINHO
+                                    </button>
                                 </div>
                             </div>
                         </li>
@@ -50,7 +60,7 @@ export default {
     data() {
         return {
             products: [] as Card[],
-            favorites: [] as Card[]
+            favorites: [] as Card[],
         }
     },
     created() {
@@ -68,6 +78,35 @@ export default {
                 return favorites.includes(parseInt(product.id));
             })
         }
+    },
+    methods: {
+        removeFavorite(id: string) {
+            const items = this.getFavoritesProductsFromStorage();
+            const index = items.indexOf(parseInt(id));
+            items.splice(index, 1);
+
+            this.$storage().addItemsToStorage("favorites", items);
+            this.products = this.getFavoritesProducts;
+        },
+        getFavoritesProductsFromStorage() {
+            return this.$storage().getAttributeFromLocalStorage("favorites");
+        },
+        addToCart(id: string) {
+            const products = this.$storage().getAttributeFromLocalStorage("cart");
+
+            const existsOnStorage = products.find((product: { id: string, quantity: number }) => product.id === id);
+
+            if (!existsOnStorage) {
+                products.push({
+                    id: id,
+                    quantity: 1
+                });
+
+                this.$storage().addItemsToStorage("cart", products);
+            }
+
+            this.$router.push("/cart");
+        },
     }
 }
 </script>
