@@ -2,6 +2,13 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+## Pre Requirements
+
+| Dependency | Version |
+|------------|---------|
+| NodeJS     |20.12.1  |
+
+
 ## Setup
 
 Make sure to install the dependencies:
@@ -72,4 +79,9 @@ yarn preview
 bun run preview
 ```
 
+## Live Preview
+
+https://ecommerce-lifeapps-git-main-magdacastros-projects.vercel.app
+
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
