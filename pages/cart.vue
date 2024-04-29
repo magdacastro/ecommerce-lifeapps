@@ -4,7 +4,11 @@
         </Header>
 
         <div class="container mt-4 mb-4">
-            <p>Home / Carrinho </p>
+            <p>
+                <NuxtLink to="/">Home</NuxtLink>
+                /
+                <NuxtLink to="/cart">Carrinho</NuxtLink>
+            </p>
 
             <div class="row">
                 <div class="col-lg-8">
@@ -20,7 +24,7 @@
                                 <div class="col-lg-9 col-md-8 info-card d-flex flex-column justify-content-between">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h1 class="title-name">{{ product.name }}</h1>
-                                        <span @click="removeProduct()" style="cursor: pointer;">
+                                        <span @click="removeProduct(product)" style="cursor: pointer;">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </span>
                                     </div>
@@ -72,8 +76,10 @@
                     </div>
 
                     <button type="button" class="btn-cart mb-4">finalizar a compra</button>
-                    <button type="button" class="btn-clear mb-4">limpar carrinho</button>
+                    <button type="button" class="btn-clear mb-4" data-bs-toggle="modal"
+                        data-bs-target="#cleanCartModal">limpar carrinho</button>
 
+                    <ModalCleanCart @confirm="cleanCart()"></ModalCleanCart>
                 </div>
             </div>
         </div>
@@ -158,8 +164,21 @@ export default {
                 return product;
             }) as CustomProductType[];
         },
-        removeProduct() {
-            console.log("go to trash")
+        removeProduct(item: CustomProductType) {
+            this.cart = this.cart.filter(function ({ id }: CartItemFromStorage) {
+                if (id === item.id) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            this.$storage().addItemsToStorage("cart", this.cart);
+        },
+        cleanCart() {
+            this.cart = [];
+
+            this.$storage().addItemsToStorage("cart", []);
         },
         logSelectedOption($e: Event, id: string) {
             if ($e.target) {
