@@ -3,7 +3,13 @@
         <Header></Header>
 
         <div class="container mt-4 mb-4" v-show="canDisplayCard">
-            <p>Home / Produtos / {{ card.name }}</p>
+            <p>
+                <NuxtLink to="/">Home</NuxtLink>
+                /
+                <NuxtLink to="/">Produtos</NuxtLink>
+                /
+                {{ card.name }}
+            </p>
 
             <div class="container-fluid">
                 <div class="row">

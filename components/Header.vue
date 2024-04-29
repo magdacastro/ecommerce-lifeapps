@@ -15,7 +15,7 @@
           </div>
 
           <ClientOnly>
-            <NuxtLink to="/" class="me-4">
+            <NuxtLink to="/profile" class="me-4">
               <img v-if="verifyIfThereAreFavoriteItems()" src="/assets/images/profile_item.svg" alt="Profile"
                 title="Você possui itens favoritados" />
               <img v-else src="/assets/images/profile_img.svg" alt="Profile" />

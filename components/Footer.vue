@@ -7,20 +7,23 @@
         </a>
       </div>
       <div class="d-flex footer-link justify-content-end">
-        <a href="#">Home</a>
-        <a href="#">Tênis</a>
-        <a href="#">Camisetas</a>
-        <a href="#">Calças</a>
+        <NuxtLink to="/">Home</NuxtLink>
+
+        <RouterLink v-for="filter in filters" :to="{ name: '', query: { filter: filter.name } }">{{
+          filter.name }}</RouterLink>
       </div>
     </div>
   </footer>
 </template>
 
 <script lang="ts">
+import { filters, type CatetegoryFilterElement } from "@/providers/CategoryProvider";
+
 export default {
   data() {
-    return {};
+    return {
+      filters
+    };
   },
-  methods: {},
 };
 </script>

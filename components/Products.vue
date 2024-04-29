@@ -48,28 +48,17 @@
       </NuxtLink>
     </section>
 
-    <button v-for="i in pagesQuantity" @click="setPage(i)">{{ i }}</button>
+    <div class="d-flex align-items-center justify-content-center mt-4 mb-4">
+      <button :class="{ 'btn-page-selected': i === page, 'btn-page': i !== page }" v-for="i in pagesQuantity"
+        @click="setPage(i)">{{ i }}</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import type { Card } from "@/interfaces/Card.d.ts";
 
-type CatetegoryFilterElement = {
-  name: string;
-}
-
-const filters: CatetegoryFilterElement[] = [
-  {
-    name: 'Tênis'
-  },
-  {
-    name: 'Camisetas'
-  },
-  {
-    name: 'Calças'
-  }
-];
+import { filters, type CatetegoryFilterElement } from "@/providers/CategoryProvider";
 
 const PER_PAGE = 6;
 
@@ -92,12 +81,13 @@ export default {
       });
   },
   computed: {
-    getProducts() {
-      const offset = (this.page - 1) * PER_PAGE;
+    getProductsWithFilters() {
       let filtered = this.cards
         .filter((card) => {
           if (this.filter) {
             return card.category === this.filter
+          } else if (this.getFilterFromQueryParameter()) {
+            return card.category === this.getFilterFromQueryParameter()
           }
 
           return true;
@@ -107,15 +97,29 @@ export default {
         filtered.sort(this.compare);
       }
 
+      return filtered;
+    },
+    getProducts() {
+      const offset = (this.page - 1) * PER_PAGE;
+
+      const filtered = this.getProductsWithFilters;
+
       return filtered.slice(offset, offset + PER_PAGE);
     },
     pagesQuantity() {
-      return Math.ceil(this.cards.length / PER_PAGE);
+      return Math.ceil(this.getProductsWithFilters.length / PER_PAGE);
     }
   },
   methods: {
     getProductUrl(id: string) {
       return `/products/${id}`;
+    },
+    getFilterFromQueryParameter(): string | null {
+      if (this.$route.query && this.$route.query.filter && !Array.isArray(this.$route.query.filter)) {
+        return this.$route.query.filter;
+      }
+
+      return null;
     },
     compare(a: Card, b: Card) {
       if (a.price < b.price) {

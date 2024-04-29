@@ -35,6 +35,20 @@ a {
   border-radius: 0px;
 }
 
+.btn-page-selected {
+  background-color: #231F20;
+  color: #ffffff;
+  border: 0.7px #231F20 solid;
+}
+
+.btn-page {
+  background-color: #ffffff;
+  color: #000000;
+  border-radius: 0;
+  border: 0.7px #ffffff solid;
+  margin: 0px 6px;
+}
+
 .btn-option {
   background-color: #f3f3f3;
   color: #4a4b4d;
@@ -156,11 +170,11 @@ ul {
 .price-badge {
   background-color: #e2342d;
   color: white;
-  padding: 8px 16px;
+  padding: 4px 8px;
   text-align: center;
   position: absolute;
   border-radius: 0px;
-  left: 210px;
+  right: 0px;
 }
 
 .shopping-badge {
