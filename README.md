@@ -2,12 +2,15 @@
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+## Task description
+
+https://github.com/devlifeapps/Prova-Frontend-Lifeapps
+
 ## Pre Requirements
 
 | Dependency | Version |
 |------------|---------|
-| NodeJS     |20.12.1  |
-
+| NodeJS     | 20.12.1 |
 
 ## Setup
 
@@ -25,6 +28,14 @@ yarn install
 
 # bun
 bun install
+```
+
+## Setup environment
+
+Copy `.env.example` to `.env`
+
+```bash
+cp .env.example .env
 ```
 
 ## Development Server
